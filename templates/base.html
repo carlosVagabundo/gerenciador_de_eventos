@@ -1,30 +1,69 @@
+
 <!doctype html>
 <html lang="pt-br">
+
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}EventManager{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}EventManager{% endblock %}</title>
 
-  <link rel="icon" type="image/svg+xml"
-      href="{{ url_for('static', filename='img/favicon.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Ícone do site -->
+    <link rel="icon" type="image/svg+xml"
+          href="{{ url_for('static', filename='img/favicon.svg') }}">
 </head>
+
 <body>
-{% if current_user %}
-<header class="topbar">
-  <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">E</span> EventManager</a>
-  <nav><a href="{{ url_for('dashboard') }}">Início</a><a href="{{ url_for('events') }}">Eventos</a>
-  {% if current_role == 'admin' %}<a href="{{ url_for('event_new') }}">Novo evento</a><a href="{{ url_for('admin_user_new') }}">Novo administrador</a>{% else %}<a href="{{ url_for('certificates') }}">Certificados</a>{% endif %}
-  </nav>
-  <div class="user-area"><span>{{ current_user }}</span><a class="logout" href="{{ url_for('logout') }}">Sair</a></div>
-</header>
-{% endif %}
-<main class="{% if current_user %}container{% else %}auth-container{% endif %}">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}<div class="alerts">{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
-  {% endwith %}
-  {% block content %}{% endblock %}
-</main>
-<footer>EventManager <span>·</span> Projeto acadêmico de gerenciamento de eventos</footer>
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body></html>
+
+    {% if current_user %}
+    <header class="topbar">
+
+        <a class="brand" href="{{ url_for('dashboard') }}">
+            <span class="brand-mark">E</span>
+            EventManager
+        </a>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Início</a>
+            <a href="{{ url_for('events') }}">Eventos</a>
+
+            {% if current_role == 'admin' %}
+                <a href="{{ url_for('event_new') }}">Novo evento</a>
+                <a href="{{ url_for('admin_user_new') }}">Novo administrador</a>
+            {% endif %}
+        </nav>
+
+        <div class="user-area">
+            <span>{{ current_user }}</span>
+            <a class="logout" href="{{ url_for('logout') }}">Sair</a>
+        </div>
+
+    </header>
+    {% endif %}
+
+    <main class="{% if current_user %}container{% else %}auth-container{% endif %}">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    <footer>
+        EventManager <span>•</span> Projeto acadêmico de gerenciamento de eventos
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>

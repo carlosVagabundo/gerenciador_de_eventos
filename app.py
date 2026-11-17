@@ -307,6 +307,42 @@ def not_found(_):
     return render_template("message.html", title="Página não encontrada",
                            message="O conteúdo solicitado não foi encontrado."), 404
 
+# Todas as outras rotas do sistema...
+
+
+@app.route("/admin/users/new", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_user_new():
+    if request.method == "POST":
+        nome = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        senha = request.form.get("password", "")
+
+        if not nome or not email or len(senha) < 6:
+            flash("Preencha todos os campos corretamente.", "error")
+        else:
+            try:
+                with db() as con:
+                    con.execute(
+                        """
+                        INSERT INTO users
+                        (name, email, password_hash, role)
+                        VALUES (?, ?, ?, ?)
+                        """,
+                        (nome, email, generate_password_hash(senha), "admin")
+                    )
+
+                flash("Administrador criado com sucesso!", "success")
+                return redirect(url_for("dashboard"))
+
+            except sqlite3.IntegrityError:
+                flash("Este e-mail já está cadastrado.", "error")
+
+    return render_template("admin_user_new.html")
+
+
 init_db()
+
 if __name__ == "__main__":
     app.run(debug=True)

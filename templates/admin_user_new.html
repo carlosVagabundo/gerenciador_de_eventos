@@ -1,12 +1,13 @@
 
 {% extends "base.html" %}
 
-{% block title %}Novo administrador{% endblock %}
+{% block title %}Novo administrador - EventManager{% endblock %}
 
 {% block content %}
 
 <h1>Cadastrar administrador</h1>
-<p>Preencha os dados da nova conta.</p>
+
+<p>Preencha os dados para criar uma nova conta administrativa.</p>
 
 <form method="POST" class="form">
 
@@ -17,10 +18,9 @@
     <input type="email" name="email" required>
 
     <label>Senha</label>
-    <input type="password" name="password"
-           minlength="6" required>
+    <input type="password" name="password" minlength="6" required>
 
-    <button class="btn primary">
+    <button type="submit" class="btn primary">
         Criar administrador
     </button>
 
