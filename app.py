@@ -4,9 +4,10 @@ import sqlite3
 from functools import wraps
 from datetime import datetime
 from pathlib import Path
+import os
 
 app = Flask(__name__)
-app.secret_key = "troque-esta-chave-antes-de-publicar"
+app.secret_key = os.environ.get("SECRET_KEY", "troque-esta-chave-antes-de-publicar")
 DB_PATH = Path(__file__).with_name("eventmanager.db")
 
 def db():
