@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}EventManager{% endblock %}</title>
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <link rel="icon" type="image/svg+xml"
+      href="{{ url_for('static', filename='img/favicon.svg') }}">
 </head>
 <body>
 {% if current_user %}
 <header class="topbar">
   <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">E</span> EventManager</a>
   <nav><a href="{{ url_for('dashboard') }}">Início</a><a href="{{ url_for('events') }}">Eventos</a>
-  {% if current_role == 'admin' %}<a href="{{ url_for('event_new') }}">Novo evento</a>{% else %}<a href="{{ url_for('certificates') }}">Certificados</a>{% endif %}
+  {% if current_role == 'admin' %}<a href="{{ url_for('event_new') }}">Novo evento</a><a href="{{ url_for('admin_user_new') }}">Novo administrador</a>{% else %}<a href="{{ url_for('certificates') }}">Certificados</a>{% endif %}
   </nav>
   <div class="user-area"><span>{{ current_user }}</span><a class="logout" href="{{ url_for('logout') }}">Sair</a></div>
 </header>
