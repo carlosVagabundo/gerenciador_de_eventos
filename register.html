@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Cadastro · EventManager{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="brand large"><span class="brand-mark">E</span> Criar conta</div>
+  <p class="muted">O cadastro público cria uma conta de aluno.</p>
+  <form method="post" class="form">
+    <label>Nome completo<input name="name" required maxlength="100"></label>
+    <label>E-mail<input type="email" name="email" required></label>
+    <label>Senha<input type="password" name="password" minlength="6" required></label>
+    <button class="btn primary full">Cadastrar</button>
+  </form>
+  <p class="auth-bottom"><a href="{{ url_for('login') }}">Voltar ao login</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Painel · EventManager{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">VISÃO GERAL</p><h1>Olá, {{ current_user.split(' ')[0] }}!</h1><p class="muted">Bem-vindo ao seu espaço de eventos.</p></div>
+{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('event_new') }}">＋ Novo evento</a>{% endif %}</div>
+{% if current_role == 'admin' %}
+<div class="stats">
+  <article class="stat-card"><span class="stat-icon">▦</span><div><p class="muted">Eventos cadastrados</p><strong>{{ total_events }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon">♙</span><div><p class="muted">Inscrições realizadas</p><strong>{{ total_regs }}</strong></div></article>
+</div>
+<h2>Próximos eventos</h2>
+{% if upcoming %}<div class="event-grid">{% for e in upcoming %}
+<article class="event-card"><div class="event-date"><strong>{{ e.event_date[8:10] }}</strong><span>{{ e.event_date[5:7] }}/{{ e.event_date[:4] }}</span></div><div class="event-info"><h3>{{ e.title }}</h3><p class="muted">{{ e.location }} · {{ e.event_time }}</p><p class="muted">{{ e.enrolled }}/{{ e.capacity }} vagas ocupadas</p><a href="{{ url_for('participants',event_id=e.id) }}">Ver participantes →</a></div></article>
+{% endfor %}</div>{% else %}<div class="empty">Nenhum evento cadastrado ainda. <a href="{{ url_for('event_new') }}">Cadastre o primeiro.</a></div>{% endif %}
+{% else %}
+<h2>Minhas inscrições</h2>
+{% if my_regs %}<div class="event-grid">{% for e in my_regs %}
+<article class="event-card"><div class="event-date"><strong>{{ e.event_date[8:10] }}</strong><span>{{ e.event_date[5:7] }}/{{ e.event_date[:4] }}</span></div><div class="event-info"><h3>{{ e.title }}</h3><p class="muted">{{ e.location }} · {{ e.event_time }}</p><span class="status {{ 'done' if e.attended else 'pending' }}">{{ 'Presença confirmada' if e.attended else 'Inscrição confirmada' }}</span></div></article>
+{% endfor %}</div>{% else %}<div class="empty">Você ainda não está inscrito em eventos. <a href="{{ url_for('events') }}">Explorar eventos</a>.</div>{% endif %}
+{% endif %}
+{% endblock %}

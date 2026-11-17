@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Eventos · EventManager{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">AGENDA ESCOLAR</p><h1>Eventos</h1><p class="muted">Encontre atividades e acompanhe as inscrições.</p></div>
+{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('event_new') }}">＋ Novo evento</a>{% endif %}</div>
+<form class="search" method="get"><input name="q" value="{{ q }}" placeholder="Pesquisar por nome, descrição ou local..."><button class="btn secondary">Buscar</button></form>
+{% if events %}<div class="event-grid">{% for e in events %}
+<article class="event-card"><div class="event-date"><strong>{{ e.event_date[8:10] }}</strong><span>{{ e.event_date[5:7] }}/{{ e.event_date[:4] }}</span></div><div class="event-info"><h3>{{ e.title }}</h3><p>{{ e.description }}</p><p class="muted">⌖ {{ e.location }} · {{ e.event_time }}</p>
+<div class="event-actions"><span class="muted">{{ e.enrolled }} de {{ e.capacity }} vagas</span>
+{% if current_role == 'admin' %}<a href="{{ url_for('event_edit',event_id=e.id) }}">Editar</a><a href="{{ url_for('participants',event_id=e.id) }}">Participantes</a><form method="post" action="{{ url_for('event_delete',event_id=e.id) }}" onsubmit="return confirm('Excluir este evento e suas inscrições?')"><button class="link danger">Excluir</button></form>
+{% else %}<form method="post" action="{{ url_for('join_event',event_id=e.id) }}"><button class="btn small primary" {% if e.enrolled >= e.capacity %}disabled{% endif %}>{{ 'Vagas esgotadas' if e.enrolled >= e.capacity else 'Inscrever-se' }}</button></form>{% endif %}
+</div></div></article>
+{% endfor %}</div>{% else %}<div class="empty">Nenhum evento encontrado.</div>{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}{{ 'Editar' if event else 'Novo' }} evento · EventManager{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">GERENCIAMENTO</p><h1>{{ 'Editar evento' if event else 'Cadastrar evento' }}</h1><p class="muted">Preencha as informações abaixo.</p></div></div>
+<section class="panel form-panel"><form method="post" class="form">
+<label>Nome do evento<input name="title" required maxlength="120" value="{{ event.title if event else '' }}"></label>
+<label>Descrição<textarea name="description" rows="4" required>{{ event.description if event else '' }}</textarea></label>
+<div class="form-row"><label>Data<input type="date" name="event_date" required value="{{ event.event_date if event else '' }}"></label><label>Horário<input type="time" name="event_time" required value="{{ event.event_time if event else '' }}"></label></div>
+<label>Local<input name="location" required value="{{ event.location if event else '' }}"></label>
+<label>Limite de vagas<input type="number" name="capacity" min="1" required value="{{ event.capacity if event else 30 }}"></label>
+<div class="form-actions"><a class="btn secondary" href="{{ url_for('events') }}">Cancelar</a><button class="btn primary">Salvar evento</button></div>
+</form></section>
+{% endblock %}
