@@ -5,9 +5,11 @@ from functools import wraps
 from datetime import datetime
 from pathlib import Path
 import os
+import secrets
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "troque-esta-chave-antes-de-publicar")
+ADMIN_CODE = os.environ.get("ADMIN_CODE", "")
 DB_PATH = Path(__file__).with_name("eventmanager.db")
 
 def db():
@@ -104,18 +106,27 @@ def register():
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+        admin_code = request.form.get("admin_code", "").strip()
+        role = "student"
+        if admin_code:
+            if ADMIN_CODE and secrets.compare_digest(admin_code.encode(), ADMIN_CODE.encode()):
+                role = "admin"
+            else:
+                flash("Código de administrador inválido.", "error")
+                return render_template("register.html", admin_enabled=bool(ADMIN_CODE))
         if not name or not email or len(password) < 6:
             flash("Preencha os campos. A senha deve ter pelo menos 6 caracteres.", "error")
         else:
             try:
                 with db() as con:
                     con.execute("INSERT INTO users(name,email,password_hash,role) VALUES(?,?,?,?)",
-                                (name, email, generate_password_hash(password), "student"))
-                flash("Conta criada! Faça login para continuar.", "success")
+                                (name, email, generate_password_hash(password), role))
+                flash("Conta de administrador criada! Faça login para continuar." if role == "admin"
+                      else "Conta criada! Faça login para continuar.", "success")
                 return redirect(url_for("login"))
             except sqlite3.IntegrityError:
                 flash("Este e-mail já está cadastrado.", "error")
-    return render_template("register.html")
+    return render_template("register.html", admin_enabled=bool(ADMIN_CODE))
 
 @app.route("/dashboard")
 @login_required
@@ -249,42 +260,6 @@ def attendance(registration_id):
                     (registration_id,))
     return redirect(request.referrer or url_for("dashboard"))
 
-
-@app.route("/admin/users/new", methods=["GET", "POST"])
-@login_required
-@admin_required
-def admin_user_new():
-    if request.method == "POST":
-        nome = request.form.get("name", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        senha = request.form.get("password", "")
-
-        if not nome or not email or len(senha) < 6:
-            flash("Preencha todos os campos corretamente.", "error")
-        else:
-            try:
-                with db() as con:
-                    con.execute(
-                        """INSERT INTO users
-                        (name, email, password_hash, role)
-                        VALUES (?, ?, ?, ?)""",
-                        (
-                            nome,
-                            email,
-                            generate_password_hash(senha),
-                            "admin"
-                        )
-                    )
-
-                flash("Administrador criado com sucesso!", "success")
-                return redirect(url_for("dashboard"))
-
-            except sqlite3.IntegrityError:
-                flash("Este e-mail já está cadastrado.", "error")
-
-    return render_template("admin_user_new.html")
-
-
 @app.route("/certificates")
 @login_required
 def certificates():
@@ -307,42 +282,6 @@ def not_found(_):
     return render_template("message.html", title="Página não encontrada",
                            message="O conteúdo solicitado não foi encontrado."), 404
 
-# Todas as outras rotas do sistema...
-
-
-@app.route("/admin/users/new", methods=["GET", "POST"])
-@login_required
-@admin_required
-def admin_user_new():
-    if request.method == "POST":
-        nome = request.form.get("name", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        senha = request.form.get("password", "")
-
-        if not nome or not email or len(senha) < 6:
-            flash("Preencha todos os campos corretamente.", "error")
-        else:
-            try:
-                with db() as con:
-                    con.execute(
-                        """
-                        INSERT INTO users
-                        (name, email, password_hash, role)
-                        VALUES (?, ?, ?, ?)
-                        """,
-                        (nome, email, generate_password_hash(senha), "admin")
-                    )
-
-                flash("Administrador criado com sucesso!", "success")
-                return redirect(url_for("dashboard"))
-
-            except sqlite3.IntegrityError:
-                flash("Este e-mail já está cadastrado.", "error")
-
-    return render_template("admin_user_new.html")
-
-
 init_db()
-
 if __name__ == "__main__":
     app.run(debug=True)

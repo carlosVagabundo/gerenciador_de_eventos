@@ -2,11 +2,12 @@
 {% block content %}
 <section class="auth-card">
   <div class="brand large"><span class="brand-mark">E</span> Criar conta</div>
-  <p class="muted">O cadastro público cria uma conta de aluno.</p>
+  <p class="muted">O cadastro cria uma conta de aluno. Para ser administrador, informe o código de administrador.</p>
   <form method="post" class="form">
     <label>Nome completo<input name="name" required maxlength="100"></label>
     <label>E-mail<input type="email" name="email" required></label>
     <label>Senha<input type="password" name="password" minlength="6" required></label>
+    {% if admin_enabled %}<label>Código de administrador <span class="muted">(opcional)</span><input type="password" name="admin_code" autocomplete="off"></label>{% endif %}
     <button class="btn primary full">Cadastrar</button>
   </form>
   <p class="auth-bottom"><a href="{{ url_for('login') }}">Voltar ao login</a></p>
