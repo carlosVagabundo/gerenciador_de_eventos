@@ -4,6 +4,11 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}EventManager{% endblock %}</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Crect x='12' y='16' width='40' height='36' rx='6' fill='%23fff'/%3E%3Crect x='12' y='16' width='40' height='11' rx='5' fill='%231d4ed8'/%3E%3Crect x='20' y='10' width='5' height='12' rx='2.5' fill='%23fff'/%3E%3Crect x='39' y='10' width='5' height='12' rx='2.5' fill='%23fff'/%3E%3Cpath d='M25 33h14M25 40h14M25 47h14M25 33v14' stroke='%232563eb' stroke-width='4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+    <script>
+    const temaSalvo = localStorage.getItem("tema") || "light";
+    document.documentElement.setAttribute("data-theme", temaSalvo);
+  </script>
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -13,9 +18,21 @@
   <nav><a href="{{ url_for('dashboard') }}">Início</a><a href="{{ url_for('events') }}">Eventos</a>
   {% if current_role == 'admin' %}<a href="{{ url_for('event_new') }}">Novo evento</a>{% else %}<a href="{{ url_for('certificates') }}">Certificados</a>{% endif %}
   </nav>
-  <div class="user-area"><span>{{ current_user }}</span><a class="logout" href="{{ url_for('logout') }}">Sair</a></div>
+  <div class="user-area">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+      🌙
+    </button>
+
+    <span>{{ current_user }}</span>
+    <a class="logout" href="{{ url_for('logout') }}">Sair</a>
+  </div>
 </header>
+{% else %}
+<button class="theme-toggle auth-theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+  🌙
+</button>
 {% endif %}
+
 <main class="{% if current_user %}container{% else %}auth-container{% endif %}">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}<div class="alerts">{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}

@@ -17,3 +17,188 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.topb
 footer{text-align:center;color:#98a2b3;font-size:11px;padding:20px;border-top:1px solid var(--line);background:#fff}footer span{padding:0 5px}
 @media(max-width:760px){.topbar{height:auto;min-height:65px;padding:12px 18px;gap:15px;flex-wrap:wrap}.topbar nav{order:3;flex-basis:100%;gap:18px;overflow:auto;padding:5px 0}.user-area{margin-left:auto}.container{padding:27px 17px 45px}.event-grid,.certificate-grid{grid-template-columns:1fr}.page-heading{align-items:flex-start;flex-direction:column}.stats{gap:10px}.stat-card{padding:14px}.event-card{padding:15px}.form-row{grid-template-columns:1fr}.auth-card{padding:25px 21px}}
 @media print{body{background:#fff}.topbar,footer,.page-heading,.btn,.alerts{display:none!important}.container{padding:0}.certificate{break-inside:avoid;box-shadow:none;border:1px solid #aaa;margin-bottom:20px}.certificate-grid{display:block}}
+
+
+/* =====================================
+   BOTÃO DE ALTERNAR TEMA
+===================================== */
+
+.theme-toggle {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+}
+
+.auth-theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 20px;
+    z-index: 10;
+}
+
+/* =====================================
+   VARIÁVEIS DO TEMA ESCURO
+===================================== */
+
+html[data-theme="dark"] {
+    --ink: #e5eaf3;
+    --muted: #a1aec2;
+    --line: #354156;
+    --bg: #111827;
+    --white: #1e293b;
+}
+
+/* Fundo e textos gerais */
+
+html[data-theme="dark"] body {
+    background: var(--bg);
+    color: var(--ink);
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3 {
+    color: var(--ink);
+}
+
+/* Cabeçalho e rodapé */
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] footer {
+    background: #1e293b;
+    border-color: var(--line);
+}
+
+html[data-theme="dark"] .brand {
+    color: var(--ink);
+}
+
+html[data-theme="dark"] .topbar nav a,
+html[data-theme="dark"] .user-area {
+    color: #cbd5e1;
+}
+
+/* Cartões e painéis */
+
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .event-card,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .certificate,
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .empty {
+    background: #1e293b;
+    border-color: var(--line);
+    color: var(--ink);
+}
+
+/* Textos secundários */
+
+html[data-theme="dark"] .muted,
+html[data-theme="dark"] .event-info > p:first-of-type,
+html[data-theme="dark"] .certificate > p:not(.eyebrow),
+html[data-theme="dark"] .signature {
+    color: var(--muted);
+}
+
+/* Campos de formulário */
+
+html[data-theme="dark"] .form input,
+html[data-theme="dark"] .form textarea,
+html[data-theme="dark"] .search input {
+    background: #111827;
+    color: var(--ink);
+    border-color: var(--line);
+}
+
+html[data-theme="dark"] .form label {
+    color: #dbe4f0;
+}
+
+/* Botões secundários */
+
+html[data-theme="dark"] .btn.secondary {
+    background: #334155;
+    color: #e5eaf3;
+}
+
+/* Ícones e datas */
+
+html[data-theme="dark"] .event-date,
+html[data-theme="dark"] .stat-icon {
+    background: #263c60;
+    color: #93b8ff;
+}
+
+/* Tabelas */
+
+html[data-theme="dark"] table {
+    background: #1e293b;
+    color: var(--ink);
+}
+
+html[data-theme="dark"] th,
+html[data-theme="dark"] td {
+    border-color: var(--line);
+}
+
+html[data-theme="dark"] th {
+    color: var(--muted);
+}
+
+/* Situações */
+
+html[data-theme="dark"] .status.done {
+    background: #174b37;
+    color: #9ae6bd;
+}
+
+html[data-theme="dark"] .status.pending {
+    background: #59451c;
+    color: #f5d58a;
+}
+
+/* Mensagens */
+
+html[data-theme="dark"] .alert.success {
+    background: #174b37;
+    color: #9ae6bd;
+}
+
+html[data-theme="dark"] .alert.error {
+    background: #512b32;
+    color: #ffc0c0;
+}
+
+/* Avisos de demonstração */
+
+html[data-theme="dark"] .demo-note {
+    background: #263449;
+    color: #dbe4f0;
+}
+
+/* Assinatura do certificado */
+
+html[data-theme="dark"] .signature {
+    border-color: var(--line);
+}
+
+/* Ajuste de impressão */
+
+@media print {
+    html[data-theme="dark"] body {
+        background: white;
+        color: black;
+    }
+}
