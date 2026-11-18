@@ -1,41 +1,47 @@
 
-// Botão de alternar tema
-const botaoTema = document.getElementById("themeToggle");
+document.addEventListener("DOMContentLoaded", function () {
 
-// Aplicar o tema escolhido
-function aplicarTema(tema) {
-    document.documentElement.setAttribute("data-theme", tema);
+    const botaoTema = document.getElementById("themeToggle");
 
-    if (botaoTema) {
-        if (tema === "dark") {
-            botaoTema.textContent = "☀️";
-            botaoTema.setAttribute("aria-label", "Ativar tema claro");
-        } else {
-            botaoTema.textContent = "🌙";
-            botaoTema.setAttribute("aria-label", "Ativar tema escuro");
+    // Aplicar o tema escolhido
+    function aplicarTema(tema) {
+        document.documentElement.setAttribute("data-theme", tema);
+
+        if (botaoTema) {
+            botaoTema.setAttribute(
+                "aria-label",
+                tema === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+            );
+
+            botaoTema.setAttribute(
+                "title",
+                tema === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+            );
         }
     }
-}
 
-// Carregar o tema salvo
-let temaSalvo = localStorage.getItem("tema") || "light";
+    // Carregar o tema salvo
+    let temaSalvo = localStorage.getItem("tema") || "light";
 
-aplicarTema(temaSalvo);
+    aplicarTema(temaSalvo);
 
-// Alternar entre tema claro e escuro
-if (botaoTema) {
-    botaoTema.addEventListener("click", function () {
-        temaSalvo = temaSalvo === "light" ? "dark" : "light";
+    // Alternar entre tema claro e escuro
+    if (botaoTema) {
+        botaoTema.addEventListener("click", function () {
 
-        localStorage.setItem("tema", temaSalvo);
+            temaSalvo = temaSalvo === "light" ? "dark" : "light";
 
-        aplicarTema(temaSalvo);
+            localStorage.setItem("tema", temaSalvo);
+
+            aplicarTema(temaSalvo);
+        });
+    }
+
+    // Animação das mensagens
+    document.querySelectorAll(".alert").forEach((alert) => {
+        window.setTimeout(() => {
+            alert.classList.add("fade");
+        }, 4500);
     });
-}
 
-// Animação das mensagens
-document.querySelectorAll(".alert").forEach((alert) => {
-    window.setTimeout(() => {
-        alert.classList.add("fade");
-    }, 4500);
 });

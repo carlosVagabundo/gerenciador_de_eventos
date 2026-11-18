@@ -19,27 +19,104 @@ footer{text-align:center;color:#98a2b3;font-size:11px;padding:20px;border-top:1p
 @media print{body{background:#fff}.topbar,footer,.page-heading,.btn,.alerts{display:none!important}.container{padding:0}.certificate{break-inside:avoid;box-shadow:none;border:1px solid #aaa;margin-bottom:20px}.certificate-grid{display:block}}
 
 
+
 /* =====================================
    BOTÃO DE ALTERNAR TEMA
 ===================================== */
 
 .theme-toggle {
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    color: #111827;
+
     border: 1px solid var(--line);
-    border-radius: 9px;
-    background: var(--bg);
-    color: var(--ink);
-    font-size: 18px;
+    border-radius: 50%;
+
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    outline: none;
+    box-shadow: none;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .theme-toggle:hover {
-    transform: scale(1.05);
+    background: rgba(120, 130, 150, 0.12);
+    border-color: var(--muted);
+    transform: rotate(12deg);
 }
+
+.theme-toggle:active {
+    transform: scale(0.92);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+}
+
+/* ÍCONES */
+
+.theme-icon {
+    width: 21px;
+    height: 21px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    display: none;
+}
+
+/* TEMA CLARO: LUA PRETA */
+
+html[data-theme="light"] .moon-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: #111827;
+    stroke: none;
+}
+
+html[data-theme="light"] .sun-icon {
+    display: none;
+}
+
+/* TEMA ESCURO: SOL BRANCO */
+
+html[data-theme="dark"] .theme-toggle {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .moon-icon {
+    display: none;
+}
+
+html[data-theme="dark"] .sun-icon {
+    display: block;
+    stroke: #ffffff;
+}
+
+/* BOTÃO NAS TELAS DE LOGIN E CADASTRO */
 
 .auth-theme-toggle {
     position: fixed;
@@ -49,7 +126,7 @@ footer{text-align:center;color:#98a2b3;font-size:11px;padding:20px;border-top:1p
 }
 
 /* =====================================
-   VARIÁVEIS DO TEMA ESCURO
+   TEMA ESCURO
 ===================================== */
 
 html[data-theme="dark"] {
@@ -60,7 +137,7 @@ html[data-theme="dark"] {
     --white: #1e293b;
 }
 
-/* Fundo e textos gerais */
+/* Fundo e textos */
 
 html[data-theme="dark"] body {
     background: var(--bg);
@@ -107,12 +184,11 @@ html[data-theme="dark"] .empty {
 
 html[data-theme="dark"] .muted,
 html[data-theme="dark"] .event-info > p:first-of-type,
-html[data-theme="dark"] .certificate > p:not(.eyebrow),
-html[data-theme="dark"] .signature {
+html[data-theme="dark"] .certificate > p:not(.eyebrow) {
     color: var(--muted);
 }
 
-/* Campos de formulário */
+/* Formulários */
 
 html[data-theme="dark"] .form input,
 html[data-theme="dark"] .form textarea,
@@ -181,20 +257,20 @@ html[data-theme="dark"] .alert.error {
     color: #ffc0c0;
 }
 
-/* Avisos de demonstração */
+/* Avisos */
 
 html[data-theme="dark"] .demo-note {
     background: #263449;
     color: #dbe4f0;
 }
 
-/* Assinatura do certificado */
+/* Certificados */
 
 html[data-theme="dark"] .signature {
     border-color: var(--line);
 }
 
-/* Ajuste de impressão */
+/* Impressão */
 
 @media print {
     html[data-theme="dark"] body {
