@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block title %}Minha conta · EventManager{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">CONFIGURAÇÕES</p><h1>Minha conta</h1><p class="muted">Gerencie seus dados, sua senha e a exclusão da conta.</p></div></div>
+<div class="account-grid">
+  <section class="panel">
+    <div class="profile-head">
+      <span class="avatar big">{{ account.name[:1]|upper }}</span>
+      <div><h2>{{ account.name }}</h2><p class="muted">{{ account.email }}</p>
+      <span class="status {{ 'done' if account.role == 'admin' else 'pending' }}">{{ 'Administrador' if account.role == 'admin' else 'Aluno' }}</span>
+      <span class="status neutral">{{ regs }} inscrição(ões)</span></div>
+    </div>
+    <form method="post" action="{{ url_for('account_profile') }}" class="form">
+      <label>Nome completo<input name="name" required minlength="2" maxlength="100" value="{{ account.name }}"></label>
+      <div class="form-actions"><button class="btn primary">Salvar nome</button></div>
+    </form>
+  </section>
+  <section class="panel">
+    <div class="panel-heading"><h2>Alterar senha</h2></div>
+    <form method="post" action="{{ url_for('account_password') }}" class="form">
+      <label>Senha atual<input type="password" name="current_password" required autocomplete="current-password"></label>
+      <div class="form-row">
+        <label>Nova senha<input type="password" name="new_password" minlength="6" required autocomplete="new-password"></label>
+        <label>Confirmar nova senha<input type="password" name="confirm_password" minlength="6" required autocomplete="new-password"></label>
+      </div>
+      <div class="form-actions"><button class="btn primary">Alterar senha</button></div>
+    </form>
+  </section>
+  <section class="panel danger-zone">
+    <div class="panel-heading"><h2>Excluir conta</h2></div>
+    <p class="muted">Esta ação não pode ser desfeita. Seus dados e todas as suas inscrições serão removidos.{% if account.role == 'admin' %} Se você for o único administrador, crie outro antes de excluir.{% endif %}</p>
+    <form method="post" action="{{ url_for('account_delete') }}" class="form" onsubmit="return confirm('Tem certeza? Sua conta será excluída para sempre.')">
+      <label>Digite sua senha para confirmar<input type="password" name="password" required autocomplete="current-password"></label>
+      <div class="form-actions"><button class="btn danger">Excluir minha conta</button></div>
+    </form>
+  </section>
+</div>
+{% endblock %}

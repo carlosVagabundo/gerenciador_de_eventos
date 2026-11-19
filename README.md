@@ -1,30 +1,40 @@
 # EventManager
 
-Sistema web escolar para gerenciamento de eventos, inscrições, vagas, presença e consulta de certificados.
+Sistema web para gerenciar eventos escolares, feito com Flask e SQLite.
 
-## Tecnologias
-- Python 3
-- Flask
-- SQLite
-- HTML, CSS e JavaScript
+## Funcionalidades
 
-## Como executar
-1. Instale Python 3.10 ou superior.
-2. Abra o terminal na pasta do projeto.
-3. Crie um ambiente virtual (recomendado):
-   - Windows: `python -m venv .venv` e `.venv\Scripts\activate`
-   - Linux/macOS: `python3 -m venv .venv` e `source .venv/bin/activate`
-4. Instale as dependências: `pip install -r requirements.txt`
-5. Inicie: `python app.py`
-6. Acesse `http://127.0.0.1:5000`.
+- Login, cadastro e contas de **aluno** e **administrador** (o administrador é criado com um código secreto)
+- Eventos com **categorias**, imagem de capa opcional, data, horário, local e limite de vagas
+- Busca e filtros por texto, categoria e período (próximos / passados)
+- Inscrição e **cancelamento de inscrição**, com controle de vagas
+- Controle de presença e certificados para imprimir ou salvar em PDF
+- Painel do administrador com **gráficos e estatísticas**
+- Página **Minha conta**: alterar nome, alterar senha e excluir a conta
+- **Tema claro e escuro** e layout adaptado para celular
 
-## Contas fictícias para demonstração
-- Administrador: `admin@eventmanager.local` / `Admin123!`
+## Como rodar localmente
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+Abra http://127.0.0.1:5000. O banco `eventmanager.db` é criado automaticamente.
+
+## Variáveis de ambiente
+
+| Variável | Para que serve |
+| --- | --- |
+| `SECRET_KEY` | Chave secreta das sessões (use um texto longo e aleatório em produção) |
+| `ADMIN_CODE` | Código para criar contas de administrador no cadastro. Sem ele, o campo não aparece |
+| `DEMO_ACCOUNTS` | Use `0` para não criar as contas fictícias de demonstração |
+
+## Publicação
+
+Comandos usados no Render: **Build** `pip install -r requirements.txt` e **Start** `python -m gunicorn app:app --bind 0.0.0.0:$PORT`.
+
+## Contas de demonstração (se `DEMO_ACCOUNTS` não for `0`)
+
+- Admin: `admin@eventmanager.local` / `Admin123!`
 - Aluno: `aluno@eventmanager.local` / `Aluno123!`
-
-O cadastro público cria somente contas de aluno. A conta administrativa inicial é criada automaticamente para demonstração. Troque a chave secreta e as credenciais antes de qualquer publicação real.
-
-## Observações
-- O banco SQLite `eventmanager.db` é criado automaticamente.
-- Certificados aparecem na área do aluno após o administrador confirmar a presença. Nesta versão, a tela funciona como consulta interna; não gera arquivo PDF.
-- Use apenas dados fictícios durante os testes escolares.

@@ -2,11 +2,16 @@
 {% block content %}
 <div class="page-heading"><div><p class="eyebrow">GERENCIAMENTO</p><h1>{{ 'Editar evento' if event else 'Cadastrar evento' }}</h1><p class="muted">Preencha as informações abaixo.</p></div></div>
 <section class="panel form-panel"><form method="post" class="form">
-<label>Nome do evento<input name="title" required maxlength="120" value="{{ event.title if event else '' }}"></label>
-<label>Descrição<textarea name="description" rows="4" required>{{ event.description if event else '' }}</textarea></label>
-<div class="form-row"><label>Data<input type="date" name="event_date" required value="{{ event.event_date if event else '' }}"></label><label>Horário<input type="time" name="event_time" required value="{{ event.event_time if event else '' }}"></label></div>
-<label>Local<input name="location" required value="{{ event.location if event else '' }}"></label>
-<label>Limite de vagas<input type="number" name="capacity" min="1" required value="{{ event.capacity if event else 30 }}"></label>
+<label>Nome do evento<input name="title" required maxlength="120" value="{{ values.get('title', '') }}"></label>
+<label>Descrição<textarea name="description" rows="4" required maxlength="2000">{{ values.get('description', '') }}</textarea></label>
+<div class="form-row">
+  <label>Categoria<select name="category">{% for c in CATEGORIES %}<option value="{{ c }}" {{ 'selected' if c == values.get('category', 'Outro') }}>{{ CATEGORY_ICONS.get(c, '') }} {{ c }}</option>{% endfor %}</select></label>
+  <label>Limite de vagas<input type="number" name="capacity" min="1" max="100000" required value="{{ values.get('capacity', 30) }}"></label>
+</div>
+<div class="form-row"><label>Data<input type="date" name="event_date" required value="{{ values.get('event_date', '') }}"></label><label>Horário<input type="time" name="event_time" required value="{{ values.get('event_time', '') }}"></label></div>
+<label>Local<input name="location" required maxlength="120" value="{{ values.get('location', '') }}"></label>
+<label>Imagem de capa <span class="muted">(opcional)</span><input type="url" name="cover_url" maxlength="500" placeholder="https://exemplo.com/imagem.jpg" value="{{ values.get('cover_url', '') }}"></label>
+<p class="hint">Cole o link de uma imagem da internet. Se ficar em branco (ou o link falhar), o evento usa a capa colorida da categoria.</p>
 <div class="form-actions"><a class="btn secondary" href="{{ url_for('events') }}">Cancelar</a><button class="btn primary">Salvar evento</button></div>
 </form></section>
 {% endblock %}

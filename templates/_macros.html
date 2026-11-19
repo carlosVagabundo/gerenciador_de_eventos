@@ -1,0 +1,49 @@
+{% macro cover(e) %}
+<div class="event-cover cat-{{ e.category|lower }}">
+  {% if e.cover_url %}<img src="{{ e.cover_url }}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
+  <span class="cover-icon">{{ CATEGORY_ICONS.get(e.category, '✨') }}</span>
+  <div class="date-badge"><strong>{{ e.event_date[8:10] }}</strong><span>{{ e.event_date|month_short }}</span></div>
+  <span class="chip">{{ e.category }}</span>
+  {% if e.event_date < today %}<span class="chip ended">Encerrado</span>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro event_card(e) %}
+{% set past = e.event_date < today %}
+{% set full = e.enrolled >= e.capacity %}
+{% set pct = [100, (e.enrolled * 100 // e.capacity)]|min %}
+<article class="event-card">
+  {{ cover(e) }}
+  <div class="event-body">
+    <h3>{{ e.title }}</h3>
+    <p class="event-desc">{{ e.description }}</p>
+    <p class="event-meta"><span>📍 {{ e.location }}</span><span>🕒 {{ e.event_time }}</span></p>
+    <div class="capacity">
+      <div class="capacity-top"><span>{{ e.enrolled }} de {{ e.capacity }} vagas</span><span>{{ pct }}%</span></div>
+      <div class="bar"><div class="bar-fill {{ 'hot' if pct >= 90 else 'warm' if pct >= 60 else '' }}" style="width: {{ pct }}%"></div></div>
+    </div>
+    <div class="event-actions">
+      {% if current_role == 'admin' %}
+        <a class="btn small secondary" href="{{ url_for('event_edit', event_id=e.id) }}">Editar</a>
+        <a class="btn small secondary" href="{{ url_for('participants', event_id=e.id) }}">Participantes</a>
+        <form method="post" action="{{ url_for('event_delete', event_id=e.id) }}" onsubmit="return confirm('Excluir este evento e suas inscrições?')"><button class="btn small ghost-danger">Excluir</button></form>
+      {% elif e.joined %}
+        {% if e.my_attended %}
+          <span class="status done">✓ Presença confirmada</span>
+        {% elif past %}
+          <span class="status neutral">Evento encerrado</span>
+        {% else %}
+          <span class="status done">Inscrito</span>
+          <form method="post" action="{{ url_for('leave_event', event_id=e.id) }}" onsubmit="return confirm('Cancelar sua inscrição neste evento?')"><button class="btn small ghost-danger">Cancelar inscrição</button></form>
+        {% endif %}
+      {% elif past %}
+        <button class="btn small primary" disabled>Evento encerrado</button>
+      {% elif full %}
+        <button class="btn small primary" disabled>Vagas esgotadas</button>
+      {% else %}
+        <form method="post" action="{{ url_for('join_event', event_id=e.id) }}"><button class="btn small primary">Inscrever-se</button></form>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endmacro %}

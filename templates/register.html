@@ -4,9 +4,12 @@
   <div class="brand large"><span class="brand-mark">E</span> Criar conta</div>
   <p class="muted">O cadastro cria uma conta de aluno. Para ser administrador, informe o código de administrador.</p>
   <form method="post" class="form">
-    <label>Nome completo<input name="name" required maxlength="100"></label>
-    <label>E-mail<input type="email" name="email" required></label>
-    <label>Senha<input type="password" name="password" minlength="6" required></label>
+    <label>Nome completo<input name="name" required minlength="2" maxlength="100" autofocus></label>
+    <label>E-mail<input type="email" name="email" required maxlength="150"></label>
+    <div class="form-row">
+      <label>Senha<input type="password" name="password" minlength="6" required></label>
+      <label>Confirmar senha<input type="password" name="password2" minlength="6" required></label>
+    </div>
     {% if admin_enabled %}<label>Código de administrador <span class="muted">(opcional)</span><input type="password" name="admin_code" autocomplete="off"></label>{% endif %}
     <button class="btn primary full">Cadastrar</button>
   </form>

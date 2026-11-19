@@ -4,11 +4,11 @@
   <div class="brand large"><span class="brand-mark">E</span> EventManager</div>
   <p class="muted">Entre para acompanhar os eventos da escola.</p>
   <form method="post" class="form">
-    <label>E-mail<input type="email" name="email" placeholder="seu@email.com" required></label>
+    <label>E-mail<input type="email" name="email" placeholder="seu@email.com" required autofocus></label>
     <label>Senha<input type="password" name="password" placeholder="Sua senha" required></label>
     <button class="btn primary full">Entrar</button>
   </form>
-  <p class="auth-bottom">Ainda não tem conta? <a href="{{ url_for('register') }}">Cadastre-se como aluno</a></p>
-  <div class="demo-note"><strong>Contas fictícias para demonstração</strong><br>Admin: admin@eventmanager.local / Admin123!<br>Aluno: aluno@eventmanager.local / Aluno123!</div>
+  <p class="auth-bottom">Ainda não tem conta? <a href="{{ url_for('register') }}">Criar conta</a></p>
+  {% if demo_enabled %}<div class="demo-note"><strong>Contas fictícias para demonstração</strong><br>Admin: admin@eventmanager.local / Admin123!<br>Aluno: aluno@eventmanager.local / Aluno123!</div>{% endif %}
 </section>
 {% endblock %}

@@ -2,6 +2,6 @@
 {% block content %}
 <div class="page-heading"><div><p class="eyebrow">MINHAS CONQUISTAS</p><h1>Certificados</h1><p class="muted">Eventos com presença confirmada.</p></div></div>
 {% if certificates %}<div class="certificate-grid">{% for c in certificates %}
-<article class="certificate"><div class="cert-mark">E</div><p class="eyebrow">CERTIFICADO DE PARTICIPAÇÃO</p><h2>{{ c.title }}</h2><p>Certificamos que <strong>{{ c.name }}</strong> participou do evento realizado em {{ c.event_date }} no local {{ c.location }}.</p><div class="signature">EventManager · Organização do evento</div><button class="btn secondary small" onclick="window.print()">Imprimir / Salvar como PDF</button></article>
+<article class="certificate"><div class="cert-mark">E</div><p class="eyebrow">CERTIFICADO DE PARTICIPAÇÃO</p><h2>{{ c.title }}</h2><p>Certificamos que <strong>{{ c.name }}</strong> participou do evento realizado em {{ c.event_date|br_date }} no local {{ c.location }}.</p><div class="signature">EventManager · Organização do evento</div><button class="btn secondary small" onclick="window.print()">Imprimir / Salvar como PDF</button></article>
 {% endfor %}</div>{% else %}<div class="empty">Seus certificados aparecerão aqui depois que a presença em um evento for confirmada pelo administrador.</div>{% endif %}
 {% endblock %}
