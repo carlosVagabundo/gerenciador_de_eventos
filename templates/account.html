@@ -28,7 +28,7 @@
   <section class="panel danger-zone">
     <div class="panel-heading"><h2>Excluir conta</h2></div>
     <p class="muted">Esta ação não pode ser desfeita. Seus dados e todas as suas inscrições serão removidos.{% if account.role == 'admin' %} Se você for o único administrador, crie outro antes de excluir.{% endif %}</p>
-    <form method="post" action="{{ url_for('account_delete') }}" class="form" onsubmit="return confirm('Tem certeza? Sua conta será excluída para sempre.')">
+    <form method="post" action="{{ url_for('account_delete') }}" class="form" data-confirm-icon="⚠️" data-confirm-title="Tem certeza que quer excluir sua conta?" data-confirm="Sua conta e todas as suas inscrições serão removidas para sempre." data-confirm-button="Excluir minha conta">
       <label>Digite sua senha para confirmar<input type="password" name="password" required autocomplete="current-password"></label>
       <div class="form-actions"><button class="btn danger">Excluir minha conta</button></div>
     </form>

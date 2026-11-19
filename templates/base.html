@@ -36,5 +36,16 @@
   {% block content %}{% endblock %}
 </main>
 <footer>EventManager <span>·</span> Projeto acadêmico de gerenciamento de eventos</footer>
+<div class="modal-backdrop" id="confirm-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+    <div class="modal-icon" id="confirm-icon">⚠️</div>
+    <h3 id="confirm-title">Tem certeza?</h3>
+    <p class="muted" id="confirm-text"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn secondary" id="confirm-cancel">Cancelar</button>
+      <button type="button" class="btn danger" id="confirm-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body></html>

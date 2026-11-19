@@ -196,10 +196,24 @@ td form{margin:0}
 
 footer{padding:22px 16px;text-align:center;color:var(--muted);font-size:13px}
 
+/* ===== Caixa de confirmação ===== */
+.modal-backdrop{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(10,12,28,.55);backdrop-filter:blur(4px);animation:fadein .2s ease both}
+.modal-backdrop[hidden]{display:none}
+.modal{width:min(420px,100%);padding:28px 26px 22px;text-align:center;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:0 24px 60px rgba(0,0,0,.35);animation:pop .25s cubic-bezier(.2,.9,.3,1.2) both}
+.modal-icon{display:inline-grid;place-items:center;width:58px;height:58px;margin-bottom:12px;border-radius:50%;background:var(--red-soft);font-size:26px}
+.modal h3{margin:0 0 8px;font-size:20px}
+.modal p{margin:0 0 22px;font-size:14px}
+.modal p:empty{display:none}
+.modal-actions{display:flex;gap:10px}
+.modal-actions .btn{flex:1}
+body.modal-open{overflow:hidden}
+
 /* ===== Animações ===== */
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes grow{from{width:0}}
 @keyframes growup{from{height:0}}
+@keyframes fadein{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.92) translateY(8px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* ===== Celular e tablet ===== */
@@ -232,7 +246,7 @@ footer{padding:22px 16px;text-align:center;color:var(--muted);font-size:13px}
 
 /* ===== Impressão (certificados) ===== */
 @media print{
-  .topbar,footer,.btn,.page-heading,.theme-float,.alerts{display:none!important}
+  .topbar,footer,.btn,.page-heading,.theme-float,.alerts,.modal-backdrop{display:none!important}
   body{background:#fff}
   .certificate{box-shadow:none;break-inside:avoid;border-color:#4f46e5}
 }

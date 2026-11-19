@@ -26,7 +26,7 @@
       {% if current_role == 'admin' %}
         <a class="btn small secondary" href="{{ url_for('event_edit', event_id=e.id) }}">Editar</a>
         <a class="btn small secondary" href="{{ url_for('participants', event_id=e.id) }}">Participantes</a>
-        <form method="post" action="{{ url_for('event_delete', event_id=e.id) }}" onsubmit="return confirm('Excluir este evento e suas inscrições?')"><button class="btn small ghost-danger">Excluir</button></form>
+        <form method="post" action="{{ url_for('event_delete', event_id=e.id) }}" data-confirm-icon="🗑️" data-confirm-title="Tem certeza que quer excluir esse evento?" data-confirm="As inscrições dele também serão removidas. Essa ação não pode ser desfeita." data-confirm-button="Excluir evento"><button class="btn small ghost-danger">Excluir</button></form>
       {% elif e.joined %}
         {% if e.my_attended %}
           <span class="status done">✓ Presença confirmada</span>
@@ -34,7 +34,7 @@
           <span class="status neutral">Evento encerrado</span>
         {% else %}
           <span class="status done">Inscrito</span>
-          <form method="post" action="{{ url_for('leave_event', event_id=e.id) }}" onsubmit="return confirm('Cancelar sua inscrição neste evento?')"><button class="btn small ghost-danger">Cancelar inscrição</button></form>
+          <form method="post" action="{{ url_for('leave_event', event_id=e.id) }}" data-confirm-icon="🎟️" data-confirm-title="Cancelar sua inscrição?" data-confirm="Sua vaga será liberada para outras pessoas." data-confirm-button="Cancelar inscrição" data-confirm-cancel="Voltar"><button class="btn small ghost-danger">Cancelar inscrição</button></form>
         {% endif %}
       {% elif past %}
         <button class="btn small primary" disabled>Evento encerrado</button>
