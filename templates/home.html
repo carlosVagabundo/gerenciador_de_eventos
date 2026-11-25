@@ -1,0 +1,42 @@
+{% extends "base.html" %}{% from "_macros.html" import public_event_card with context %}
+{% block title %}EventManager · Eventos da escola em um só lugar{% endblock %}
+{% block anon_header %}
+<header class="topbar">
+  <a class="brand" href="{{ url_for('main.index') }}"><span class="brand-mark" aria-hidden="true">E</span> EventManager</a>
+  <nav class="public-nav" aria-label="Principal"><a href="#proximos">Próximos eventos</a><a href="#recursos">Recursos</a></nav>
+  <div class="user-area">
+    <button class="icon-btn theme-toggle" type="button" aria-label="Usar tema escuro" aria-pressed="false" title="Alternar tema"><span class="icon-moon" aria-hidden="true">🌙</span><span class="icon-sun" aria-hidden="true">☀️</span></button>
+    <a class="btn small secondary" href="{{ url_for('auth.login') }}">Entrar</a>
+    <a class="btn small primary" href="{{ url_for('auth.register') }}">Criar conta</a>
+  </div>
+</header>
+{% endblock %}
+{% block main_class %}container home{% endblock %}
+{% block content %}
+<section class="hero" aria-labelledby="hero-title">
+  <p class="eyebrow">EVENTOS ESCOLARES</p>
+  <h1 id="hero-title">Todos os eventos da escola em um só lugar</h1>
+  <p class="hero-text">Veja a agenda, garanta sua vaga, entre na lista de espera quando esgotar, leve o evento para o seu calendário e receba o certificado de participação.</p>
+  <div class="hero-actions">
+    <a class="btn primary" href="{{ url_for('auth.register') }}">Criar minha conta</a>
+    <a class="btn secondary" href="{{ url_for('auth.login') }}">Já tenho conta</a>
+  </div>
+  <p class="muted hero-note">{{ upcoming_total }} evento(s) programado(s) para os próximos dias.</p>
+</section>
+
+<section id="proximos" aria-labelledby="proximos-title">
+  <h2 id="proximos-title">Próximos eventos</h2>
+  {% if upcoming %}<div class="event-grid">{% for e in upcoming %}{{ public_event_card(e) }}{% endfor %}</div>
+  {% else %}<div class="empty">Ainda não há eventos futuros cadastrados. Volte em breve!</div>{% endif %}
+</section>
+
+<section id="recursos" aria-labelledby="recursos-title">
+  <h2 id="recursos-title">O que você pode fazer</h2>
+  <div class="feature-grid">
+    <article class="feature"><span class="feature-icon" aria-hidden="true">🎟️</span><h3>Inscrição em um clique</h3><p>Escolha o evento, confirme a inscrição e acompanhe tudo no seu painel.</p></article>
+    <article class="feature"><span class="feature-icon" aria-hidden="true">⏳</span><h3>Lista de espera</h3><p>Vagas esgotadas? Entre na fila: se alguém cancelar, a vaga vai para você automaticamente.</p></article>
+    <article class="feature"><span class="feature-icon" aria-hidden="true">📅</span><h3>Calendário</h3><p>Adicione o evento ao Google Agenda ou baixe o arquivo para Apple e Outlook.</p></article>
+    <article class="feature"><span class="feature-icon" aria-hidden="true">🎓</span><h3>Certificados</h3><p>Teve presença confirmada? O certificado fica pronto para imprimir ou salvar em PDF.</p></article>
+  </div>
+</section>
+{% endblock %}

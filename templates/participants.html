@@ -1,13 +1,18 @@
 {% extends "base.html" %}{% block title %}Participantes · EventManager{% endblock %}
 {% block content %}
 {% set present = people|selectattr('attended')|list|length %}
-<div class="page-heading"><div><p class="eyebrow">CONTROLE DE PRESENÇA</p><h1>{{ event.title }}</h1><p class="muted">{{ event.event_date|br_date }} · {{ event.event_time }} · {{ event.location }}</p></div><a class="btn secondary" href="{{ url_for('events') }}">Voltar</a></div>
+<div class="page-heading"><div><p class="eyebrow">CONTROLE DE PRESENÇA</p><h1>{{ event.title }}</h1><p class="muted">{{ event.event_date|br_date }} · {{ event.event_time }} · {{ event.location }}</p></div><div class="heading-actions"><a class="btn secondary" href="{{ url_for('events.participants_csv', event_id=event.id) }}">Baixar CSV</a><a class="btn secondary" href="{{ url_for('events.index') }}">Voltar</a></div></div>
 <div class="stats small-stats">
-  <article class="stat-card"><span class="stat-icon">🎟️</span><div><p class="muted">Inscritos</p><strong>{{ people|length }}/{{ event.capacity }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">✅</span><div><p class="muted">Presenças confirmadas</p><strong>{{ present }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">🎟️</span><div><p class="muted">Inscritos</p><strong>{{ people|length }}/{{ event.capacity }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">✅</span><div><p class="muted">Presenças confirmadas</p><strong>{{ present }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">⏳</span><div><p class="muted">Na lista de espera</p><strong>{{ queue|length }}</strong></div></article>
 </div>
-<section class="panel"><div class="panel-heading"><h2>Participantes inscritos</h2><span class="muted">{{ people|length }} pessoa(s)</span></div>
-{% if people %}<div class="table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Presença</th><th>Ação</th></tr></thead><tbody>
-{% for p in people %}<tr><td>{{ p.name }}</td><td>{{ p.email }}</td><td><span class="status {{ 'done' if p.attended else 'pending' }}">{{ 'Presente' if p.attended else 'Pendente' }}</span></td><td><form method="post" action="{{ url_for('attendance', registration_id=p.registration_id) }}"><button class="btn small {{ 'secondary' if p.attended else 'primary' }}">{{ 'Desfazer' if p.attended else 'Confirmar presença' }}</button></form></td></tr>{% endfor %}
+<section class="panel" aria-labelledby="part-title"><div class="panel-heading"><h2 id="part-title">Participantes inscritos</h2><span class="muted">{{ people|length }} pessoa(s)</span></div>
+{% if people %}<div class="table-wrap"><table><caption class="sr-only">Participantes inscritos em {{ event.title }}</caption><thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Presença</th><th scope="col">Ação</th></tr></thead><tbody>
+{% for p in people %}<tr><td>{{ p.name }}</td><td>{{ p.email }}</td><td><span class="status {{ 'done' if p.attended else 'pending' }}">{{ 'Presente' if p.attended else 'Pendente' }}</span></td><td><form method="post" action="{{ url_for('events.attendance', registration_id=p.registration_id) }}">{{ csrf_field() }}<button class="btn small {{ 'secondary' if p.attended else 'primary' }}">{{ 'Desfazer' if p.attended else 'Confirmar presença' }}<span class="sr-only"> de {{ p.name }}</span></button></form></td></tr>{% endfor %}
 </tbody></table></div>{% else %}<div class="empty">Ainda não há participantes inscritos.</div>{% endif %}</section>
+<section class="panel spaced" aria-labelledby="queue-title"><div class="panel-heading"><h2 id="queue-title">Lista de espera</h2><span class="muted">{{ queue|length }} pessoa(s)</span></div>
+{% if queue %}<div class="table-wrap"><table><caption class="sr-only">Fila de espera de {{ event.title }}</caption><thead><tr><th scope="col">Posição</th><th scope="col">Nome</th><th scope="col">E-mail</th></tr></thead><tbody>
+{% for w in queue %}<tr><td>{{ loop.index }}º</td><td>{{ w.name }}</td><td>{{ w.email }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">Ninguém na lista de espera.</div>{% endif %}</section>
 {% endblock %}

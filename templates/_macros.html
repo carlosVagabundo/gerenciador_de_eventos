@@ -1,32 +1,36 @@
 {% macro cover(e) %}
 <div class="event-cover cat-{{ e.category|lower }}">
-  {% if e.cover_url %}<img src="{{ e.cover_url }}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
-  <span class="cover-icon">{{ CATEGORY_ICONS.get(e.category, '✨') }}</span>
-  <div class="date-badge"><strong>{{ e.event_date[8:10] }}</strong><span>{{ e.event_date|month_short }}</span></div>
+  {% if e.cover_url %}<img src="{{ e.cover_url }}" alt="Capa do evento {{ e.title }}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
+  <span class="cover-icon" aria-hidden="true">{{ CATEGORY_ICONS.get(e.category, '✨') }}</span>
+  <time class="date-badge" datetime="{{ e.event_date }}"><span class="sr-only">{{ e.event_date|br_date }}</span><strong aria-hidden="true">{{ e.event_date[8:10] }}</strong><span aria-hidden="true">{{ e.event_date|month_short }}</span></time>
   <span class="chip">{{ e.category }}</span>
   {% if e.event_date < today %}<span class="chip ended">Encerrado</span>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro capacity(e) %}
+{% set pct = [100, (e.enrolled * 100 // e.capacity)]|min %}
+<div class="capacity">
+  <div class="capacity-top"><span>{{ e.enrolled }} de {{ e.capacity }} vagas{% if e.waiting %} · {{ e.waiting }} na fila{% endif %}</span><span aria-hidden="true">{{ pct }}%</span></div>
+  <div class="bar" role="progressbar" aria-label="Vagas ocupadas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}"><div class="bar-fill {{ 'hot' if pct >= 90 else 'warm' if pct >= 60 else '' }}" style="width: {{ pct }}%"></div></div>
 </div>
 {% endmacro %}
 
 {% macro event_card(e) %}
 {% set past = e.event_date < today %}
 {% set full = e.enrolled >= e.capacity %}
-{% set pct = [100, (e.enrolled * 100 // e.capacity)]|min %}
-<article class="event-card">
+<article class="event-card" aria-labelledby="ev-{{ e.id }}">
   {{ cover(e) }}
   <div class="event-body">
-    <h3>{{ e.title }}</h3>
+    <h3 id="ev-{{ e.id }}">{{ e.title }}</h3>
     <p class="event-desc">{{ e.description }}</p>
-    <p class="event-meta"><span>📍 {{ e.location }}</span><span>🕒 {{ e.event_time }}</span></p>
-    <div class="capacity">
-      <div class="capacity-top"><span>{{ e.enrolled }} de {{ e.capacity }} vagas</span><span>{{ pct }}%</span></div>
-      <div class="bar"><div class="bar-fill {{ 'hot' if pct >= 90 else 'warm' if pct >= 60 else '' }}" style="width: {{ pct }}%"></div></div>
-    </div>
+    <p class="event-meta"><span><span aria-hidden="true">📍</span><span class="sr-only">Local:</span> {{ e.location }}</span><span><span aria-hidden="true">🕒</span><span class="sr-only">Horário:</span> {{ e.event_time }}</span></p>
+    {{ capacity(e) }}
     <div class="event-actions">
       {% if current_role == 'admin' %}
-        <a class="btn small secondary" href="{{ url_for('event_edit', event_id=e.id) }}">Editar</a>
-        <a class="btn small secondary" href="{{ url_for('participants', event_id=e.id) }}">Participantes</a>
-        <form method="post" action="{{ url_for('event_delete', event_id=e.id) }}" data-confirm-icon="🗑️" data-confirm-title="Tem certeza que quer excluir esse evento?" data-confirm="As inscrições dele também serão removidas. Essa ação não pode ser desfeita." data-confirm-button="Excluir evento"><button class="btn small ghost-danger">Excluir</button></form>
+        <a class="btn small secondary" href="{{ url_for('events.edit_event', event_id=e.id) }}">Editar<span class="sr-only"> {{ e.title }}</span></a>
+        <a class="btn small secondary" href="{{ url_for('events.participants', event_id=e.id) }}">Participantes<span class="sr-only"> de {{ e.title }}</span></a>
+        <form method="post" action="{{ url_for('events.delete_event', event_id=e.id) }}" data-confirm-icon="🗑️" data-confirm-title="Tem certeza que quer excluir esse evento?" data-confirm="As inscrições dele também serão removidas. Essa ação não pode ser desfeita." data-confirm-button="Excluir evento">{{ csrf_field() }}<button class="btn small ghost-danger">Excluir<span class="sr-only"> {{ e.title }}</span></button></form>
       {% elif e.joined %}
         {% if e.my_attended %}
           <span class="status done">✓ Presença confirmada</span>
@@ -34,16 +38,50 @@
           <span class="status neutral">Evento encerrado</span>
         {% else %}
           <span class="status done">Inscrito</span>
-          <form method="post" action="{{ url_for('leave_event', event_id=e.id) }}" data-confirm-icon="🎟️" data-confirm-title="Cancelar sua inscrição?" data-confirm="Sua vaga será liberada para outras pessoas." data-confirm-button="Cancelar inscrição" data-confirm-cancel="Voltar"><button class="btn small ghost-danger">Cancelar inscrição</button></form>
+          <details class="menu"><summary class="btn small secondary"><span aria-hidden="true">📅</span> Calendário<span class="sr-only"> de {{ e.title }}</span></summary>
+            <div class="menu-list"><a href="{{ google_calendar_url(e) }}" target="_blank" rel="noopener">Google Agenda <span class="sr-only">(abre em nova aba)</span></a><a href="{{ url_for('events.calendar_file', event_id=e.id) }}">Baixar arquivo .ics (Apple, Outlook)</a></div></details>
+          <form method="post" action="{{ url_for('events.leave_event', event_id=e.id) }}" data-confirm-icon="🎟️" data-confirm-title="Cancelar sua inscrição?" data-confirm="Sua vaga será liberada para a próxima pessoa da lista de espera." data-confirm-button="Cancelar inscrição" data-confirm-cancel="Voltar">{{ csrf_field() }}<button class="btn small ghost-danger">Cancelar inscrição<span class="sr-only"> em {{ e.title }}</span></button></form>
         {% endif %}
+      {% elif e.waitlist_pos %}
+        <span class="status pending">Lista de espera: {{ e.waitlist_pos }}º</span>
+        <form method="post" action="{{ url_for('events.leave_waitlist', event_id=e.id) }}">{{ csrf_field() }}<button class="btn small secondary">Sair da lista<span class="sr-only"> de {{ e.title }}</span></button></form>
       {% elif past %}
         <button class="btn small primary" disabled>Evento encerrado</button>
       {% elif full %}
-        <button class="btn small primary" disabled>Vagas esgotadas</button>
+        <form method="post" action="{{ url_for('events.join_waitlist', event_id=e.id) }}">{{ csrf_field() }}<button class="btn small primary">Entrar na lista de espera<span class="sr-only"> de {{ e.title }}</span></button></form>
       {% else %}
-        <form method="post" action="{{ url_for('join_event', event_id=e.id) }}"><button class="btn small primary">Inscrever-se</button></form>
+        <form method="post" action="{{ url_for('events.join_event', event_id=e.id) }}">{{ csrf_field() }}<button class="btn small primary">Inscrever-se<span class="sr-only"> em {{ e.title }}</span></button></form>
       {% endif %}
     </div>
   </div>
 </article>
+{% endmacro %}
+
+{% macro public_event_card(e) %}
+<article class="event-card" aria-labelledby="pub-{{ e.id }}">
+  {{ cover(e) }}
+  <div class="event-body">
+    <h3 id="pub-{{ e.id }}">{{ e.title }}</h3>
+    <p class="event-desc">{{ e.description }}</p>
+    <p class="event-meta"><span><span aria-hidden="true">📍</span><span class="sr-only">Local:</span> {{ e.location }}</span><span><span aria-hidden="true">🕒</span><span class="sr-only">Horário:</span> {{ e.event_time }}</span></p>
+    {{ capacity(e) }}
+    <div class="event-actions"><a class="btn small primary" href="{{ url_for('auth.login') }}">Entrar para participar<span class="sr-only"> de {{ e.title }}</span></a></div>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro pagination(pager, endpoint, filters) %}
+{% if pager.pages > 1 %}
+<nav class="pagination" aria-label="Paginação">
+  {% if pager.has_prev %}<a class="page-link" rel="prev" href="{{ url_for(endpoint, page=pager.page - 1, **filters) }}"><span aria-hidden="true">←</span> Anterior</a>{% endif %}
+  <ul>
+    {% for n in pager.numbers %}
+      {% if n is none %}<li aria-hidden="true"><span class="page-gap">…</span></li>
+      {% elif n == pager.page %}<li><span class="page-link current" aria-current="page"><span class="sr-only">Página </span>{{ n }}</span></li>
+      {% else %}<li><a class="page-link" href="{{ url_for(endpoint, page=n, **filters) }}"><span class="sr-only">Página </span>{{ n }}</a></li>{% endif %}
+    {% endfor %}
+  </ul>
+  {% if pager.has_next %}<a class="page-link" rel="next" href="{{ url_for(endpoint, page=pager.page + 1, **filters) }}">Próxima <span aria-hidden="true">→</span></a>{% endif %}
+</nav>
+{% endif %}
 {% endmacro %}

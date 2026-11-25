@@ -1,18 +1,19 @@
 {% extends "base.html" %}{% block title %}Cadastro · EventManager{% endblock %}
 {% block content %}
-<section class="auth-card">
-  <div class="brand large"><span class="brand-mark">E</span> Criar conta</div>
+<section class="auth-card" aria-labelledby="register-title">
+  <h1 class="brand large" id="register-title"><span class="brand-mark" aria-hidden="true">E</span> Criar conta</h1>
   <p class="muted">O cadastro cria uma conta de aluno. Para ser administrador, informe o código de administrador.</p>
-  <form method="post" class="form">
-    <label>Nome completo<input name="name" required minlength="2" maxlength="100" autofocus></label>
-    <label>E-mail<input type="email" name="email" required maxlength="150"></label>
+  <form method="post" class="form">{{ csrf_field() }}
+    <label>Nome completo<input name="name" required minlength="2" maxlength="100" autofocus autocomplete="name"></label>
+    <label>E-mail<input type="email" name="email" required maxlength="150" autocomplete="email"></label>
     <div class="form-row">
-      <label>Senha<input type="password" name="password" minlength="6" required></label>
-      <label>Confirmar senha<input type="password" name="password2" minlength="6" required></label>
+      <label>Senha<input type="password" name="password" minlength="6" required autocomplete="new-password" aria-describedby="senha-ajuda"></label>
+      <label>Confirmar senha<input type="password" name="password2" minlength="6" required autocomplete="new-password"></label>
     </div>
+    <p class="hint" id="senha-ajuda">A senha precisa ter pelo menos 6 caracteres.</p>
     {% if admin_enabled %}<label>Código de administrador <span class="muted">(opcional)</span><input type="password" name="admin_code" autocomplete="off"></label>{% endif %}
     <button class="btn primary full">Cadastrar</button>
   </form>
-  <p class="auth-bottom"><a href="{{ url_for('login') }}">Voltar ao login</a></p>
+  <p class="auth-bottom"><a href="{{ url_for('auth.login') }}">Voltar ao login</a></p>
 </section>
 {% endblock %}

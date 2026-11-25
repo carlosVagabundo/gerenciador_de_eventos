@@ -2,3 +2,8 @@
 __pycache__/
 *.pyc
 eventmanager.db
+logs/
+backups/
+static/uploads/*
+!static/uploads/.gitkeep
+.pytest_cache/

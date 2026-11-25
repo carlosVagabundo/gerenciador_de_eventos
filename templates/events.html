@@ -1,16 +1,17 @@
-{% extends "base.html" %}{% from "_macros.html" import event_card with context %}
-{% block title %}Eventos · EventManager{% endblock %}
+{% extends "base.html" %}{% from "_macros.html" import event_card, pagination with context %}
+{% block title %}Eventos{% if pager.page > 1 %} (página {{ pager.page }}){% endif %} · EventManager{% endblock %}
 {% block content %}
 <div class="page-heading"><div><p class="eyebrow">AGENDA ESCOLAR</p><h1>Eventos</h1><p class="muted">Encontre atividades e acompanhe as inscrições.</p></div>
-{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('event_new') }}">＋ Novo evento</a>{% endif %}</div>
-<form class="filters" method="get">
-  <input name="q" value="{{ q }}" placeholder="Pesquisar por nome, descrição ou local..." maxlength="100">
-  <select name="category" aria-label="Categoria"><option value="">Todas as categorias</option>{% for c in CATEGORIES %}<option value="{{ c }}" {{ 'selected' if c == category }}>{{ CATEGORY_ICONS.get(c, '') }} {{ c }}</option>{% endfor %}</select>
-  <select name="period" aria-label="Período"><option value="all" {{ 'selected' if period == 'all' }}>Todas as datas</option><option value="upcoming" {{ 'selected' if period == 'upcoming' }}>Próximos eventos</option><option value="past" {{ 'selected' if period == 'past' }}>Eventos passados</option></select>
+{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('events.new_event') }}"><span aria-hidden="true">＋</span> Novo evento</a>{% endif %}</div>
+<form class="filters" method="get" role="search" aria-label="Filtrar eventos">
+  <label class="filter-field grow"><span class="sr-only">Pesquisar eventos</span><input name="q" value="{{ q }}" placeholder="Pesquisar por nome, descrição ou local..." maxlength="100"></label>
+  <label class="filter-field"><span class="sr-only">Categoria</span><select name="category"><option value="">Todas as categorias</option>{% for c in CATEGORIES %}<option value="{{ c }}" {{ 'selected' if c == category }}>{{ c }}</option>{% endfor %}</select></label>
+  <label class="filter-field"><span class="sr-only">Período</span><select name="period"><option value="all" {{ 'selected' if period == 'all' }}>Todas as datas</option><option value="upcoming" {{ 'selected' if period == 'upcoming' }}>Próximos eventos</option><option value="past" {{ 'selected' if period == 'past' }}>Eventos passados</option></select></label>
   <button class="btn primary">Filtrar</button>
-  {% if q or category or period != 'all' %}<a class="btn secondary" href="{{ url_for('events') }}">Limpar</a>{% endif %}
+  {% if q or category or period != 'all' %}<a class="btn secondary" href="{{ url_for('events.index') }}">Limpar</a>{% endif %}
 </form>
-<p class="muted result-count">{{ events|length }} evento(s) encontrado(s)</p>
+<p class="muted result-count" role="status">{{ pager.total }} evento(s) encontrado(s){% if pager.pages > 1 %} · página {{ pager.page }} de {{ pager.pages }}{% endif %}</p>
 {% if events %}<div class="event-grid">{% for e in events %}{{ event_card(e) }}{% endfor %}</div>
+{{ pagination(pager, 'events.index', filters) }}
 {% else %}<div class="empty">Nenhum evento encontrado com esses filtros.</div>{% endif %}
 {% endblock %}

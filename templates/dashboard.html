@@ -2,50 +2,53 @@
 {% block title %}Painel · EventManager{% endblock %}
 {% block content %}
 <div class="page-heading"><div><p class="eyebrow">VISÃO GERAL</p><h1>Olá, {{ current_user.split(' ')[0] }}!</h1><p class="muted">Bem-vindo ao seu espaço de eventos.</p></div>
-{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('event_new') }}">＋ Novo evento</a>{% else %}<a class="btn primary" href="{{ url_for('events') }}">Explorar eventos</a>{% endif %}</div>
+{% if current_role == 'admin' %}<a class="btn primary" href="{{ url_for('events.new_event') }}"><span aria-hidden="true">＋</span> Novo evento</a>{% else %}<a class="btn primary" href="{{ url_for('events.index') }}">Explorar eventos</a>{% endif %}</div>
 
 {% if current_role == 'admin' %}
 <div class="stats">
-  <article class="stat-card"><span class="stat-icon">📅</span><div><p class="muted">Eventos cadastrados</p><strong>{{ stats.events }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">🎟️</span><div><p class="muted">Inscrições realizadas</p><strong>{{ stats.regs }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">🎓</span><div><p class="muted">Alunos cadastrados</p><strong>{{ stats.students }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">✅</span><div><p class="muted">Taxa de presença</p><strong>{{ stats.rate }}%</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">📅</span><div><p class="muted">Eventos cadastrados</p><strong>{{ stats.events }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">🎟️</span><div><p class="muted">Inscrições realizadas</p><strong>{{ stats.regs }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">🎓</span><div><p class="muted">Alunos cadastrados</p><strong>{{ stats.students }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">✅</span><div><p class="muted">Taxa de presença</p><strong>{{ stats.rate }}%</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">⏳</span><div><p class="muted">Na lista de espera</p><strong>{{ stats.waiting }}</strong></div></article>
 </div>
 
 <div class="chart-grid">
-  <section class="panel">
-    <div class="panel-heading"><h2>Inscrições nos últimos 7 dias</h2></div>
-    <div class="cols">{% for d in stats.last7 %}
-      <div class="col"><span class="col-value">{{ d.value }}</span><div class="col-bar"><div class="col-fill" style="height: {{ d.pct }}%"></div></div><span class="col-label">{{ d.label }}</span></div>
+  <section class="panel" aria-labelledby="chart-7d">
+    <div class="panel-heading"><h2 id="chart-7d">Inscrições nos últimos 7 dias</h2></div>
+    <div class="cols" role="list">{% for d in stats.last7 %}
+      <div class="col" role="listitem"><span class="col-value" aria-hidden="true">{{ d.value }}</span><div class="col-bar" aria-hidden="true"><div class="col-fill" style="height: {{ d.pct }}%"></div></div><span class="col-label" aria-hidden="true">{{ d.label }}</span><span class="sr-only">{{ d.label }}: {{ d.value }} inscrição(ões)</span></div>
     {% endfor %}</div>
   </section>
-  <section class="panel">
-    <div class="panel-heading"><h2>Eventos por categoria</h2></div>
-    {% if stats.by_category %}{% for c in stats.by_category %}
-      <div class="hbar"><span class="hbar-label">{{ CATEGORY_ICONS.get(c.label, '✨') }} {{ c.label }}</span><div class="bar"><div class="bar-fill" style="width: {{ c.pct }}%"></div></div><strong>{{ c.value }}</strong></div>
-    {% endfor %}{% else %}<p class="muted">Cadastre eventos para ver este gráfico.</p>{% endif %}
+  <section class="panel" aria-labelledby="chart-cat">
+    <div class="panel-heading"><h2 id="chart-cat">Eventos por categoria</h2></div>
+    {% if stats.by_category %}<div role="list">{% for c in stats.by_category %}
+      <div class="hbar" role="listitem"><span class="hbar-label">{{ CATEGORY_ICONS.get(c.label, '✨') }} {{ c.label }}</span><div class="bar" aria-hidden="true"><div class="bar-fill" style="width: {{ c.pct }}%"></div></div><strong>{{ c.value }}<span class="sr-only"> evento(s)</span></strong></div>
+    {% endfor %}</div>{% else %}<p class="muted">Cadastre eventos para ver este gráfico.</p>{% endif %}
   </section>
-  <section class="panel wide">
-    <div class="panel-heading"><h2>Ocupação dos próximos eventos</h2></div>
-    {% if occupancy %}{% for o in occupancy %}
-      <div class="hbar wide-label"><span class="hbar-label" title="{{ o.title }}">{{ o.title }}</span><div class="bar"><div class="bar-fill {{ 'hot' if o.pct >= 90 else 'warm' if o.pct >= 60 else '' }}" style="width: {{ o.pct }}%"></div></div><strong>{{ o.enrolled }}/{{ o.capacity }}</strong></div>
-    {% endfor %}{% else %}<p class="muted">Nenhum evento futuro cadastrado.</p>{% endif %}
+  <section class="panel wide" aria-labelledby="chart-occ">
+    <div class="panel-heading"><h2 id="chart-occ">Ocupação dos próximos eventos</h2></div>
+    {% if occupancy %}<div role="list">{% for o in occupancy %}
+      <div class="hbar wide-label" role="listitem"><span class="hbar-label" title="{{ o.title }}">{{ o.title }}</span><div class="bar" role="progressbar" aria-label="Ocupação de {{ o.title }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ o.pct }}"><div class="bar-fill {{ 'hot' if o.pct >= 90 else 'warm' if o.pct >= 60 else '' }}" style="width: {{ o.pct }}%"></div></div><strong>{{ o.enrolled }}/{{ o.capacity }}<span class="sr-only"> vagas</span></strong></div>
+    {% endfor %}</div>{% else %}<p class="muted">Nenhum evento futuro cadastrado.</p>{% endif %}
   </section>
 </div>
 
 <h2>Próximos eventos</h2>
 {% if upcoming %}<div class="event-grid">{% for e in upcoming %}{{ event_card(e) }}{% endfor %}</div>
-{% else %}<div class="empty">Nenhum evento futuro. <a href="{{ url_for('event_new') }}">Cadastre um evento.</a></div>{% endif %}
+{% else %}<div class="empty">Nenhum evento futuro. <a href="{{ url_for('events.new_event') }}">Cadastre um evento.</a></div>{% endif %}
 
 {% else %}
 <div class="stats">
-  <article class="stat-card"><span class="stat-icon">🎟️</span><div><p class="muted">Inscrições ativas</p><strong>{{ summary.active }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">✅</span><div><p class="muted">Presenças confirmadas</p><strong>{{ summary.present }}</strong></div></article>
-  <article class="stat-card"><span class="stat-icon">📚</span><div><p class="muted">Total de inscrições</p><strong>{{ summary.total }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">🎟️</span><div><p class="muted">Inscrições ativas</p><strong>{{ summary.active }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">✅</span><div><p class="muted">Presenças confirmadas</p><strong>{{ summary.present }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">⏳</span><div><p class="muted">Na lista de espera</p><strong>{{ summary.waiting }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon" aria-hidden="true">📚</span><div><p class="muted">Total de inscrições</p><strong>{{ summary.total }}</strong></div></article>
 </div>
 <h2>Próximas inscrições</h2>
 {% if mine_upcoming %}<div class="event-grid">{% for e in mine_upcoming %}{{ event_card(e) }}{% endfor %}</div>
-{% else %}<div class="empty">Você não tem inscrições em eventos futuros. <a href="{{ url_for('events') }}">Explorar eventos</a>.</div>{% endif %}
+{% else %}<div class="empty">Você não tem inscrições em eventos futuros. <a href="{{ url_for('events.index') }}">Explorar eventos</a>.</div>{% endif %}
+{% if waiting %}<h2>Na lista de espera</h2><div class="event-grid">{% for e in waiting %}{{ event_card(e) }}{% endfor %}</div>{% endif %}
 {% if mine_past %}<h2>Eventos anteriores</h2><div class="event-grid">{% for e in mine_past %}{{ event_card(e) }}{% endfor %}</div>{% endif %}
 {% endif %}
 {% endblock %}

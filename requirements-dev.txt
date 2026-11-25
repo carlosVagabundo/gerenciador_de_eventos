@@ -1,0 +1,3 @@
+# Opcional: o projeto roda os testes com unittest (sem instalar nada).
+-r requirements.txt
+pytest>=8.0

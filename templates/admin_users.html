@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% from "_macros.html" import pagination with context %}
+{% block title %}Usuários{% if pager.page > 1 %} (página {{ pager.page }}){% endif %} · EventManager{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários</h1><p class="muted">Veja quem tem conta, mude o tipo de conta ou exclua contas.</p></div></div>
+<form class="filters" method="get" role="search" aria-label="Filtrar usuários">
+  <label class="filter-field grow"><span class="sr-only">Pesquisar por nome ou e-mail</span><input name="q" value="{{ q }}" placeholder="Pesquisar por nome ou e-mail..." maxlength="100"></label>
+  <label class="filter-field"><span class="sr-only">Tipo de conta</span><select name="role"><option value="">Todos os tipos</option><option value="admin" {{ 'selected' if role == 'admin' }}>Administradores</option><option value="student" {{ 'selected' if role == 'student' }}>Alunos</option></select></label>
+  <button class="btn primary">Filtrar</button>
+  {% if q or role %}<a class="btn secondary" href="{{ url_for('admin.users') }}">Limpar</a>{% endif %}
+</form>
+<p class="muted result-count" role="status">{{ pager.total }} usuário(s){% if pager.pages > 1 %} · página {{ pager.page }} de {{ pager.pages }}{% endif %}</p>
+{% if users %}
+<section class="panel" aria-label="Lista de usuários"><div class="table-wrap"><table>
+  <caption class="sr-only">Usuários cadastrados</caption>
+  <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Tipo</th><th scope="col">Inscrições</th><th scope="col">Ações</th></tr></thead>
+  <tbody>
+  {% for u in users %}
+  <tr>
+    <td>{{ u.name }}{% if u.id == g.user.id %} <span class="status neutral">Você</span>{% endif %}</td>
+    <td>{{ u.email }}</td>
+    <td><span class="status {{ 'done' if u.role == 'admin' else 'pending' }}">{{ 'Administrador' if u.role == 'admin' else 'Aluno' }}</span></td>
+    <td>{{ u.regs }}{% if u.waiting %} <span class="muted">(+{{ u.waiting }} na fila)</span>{% endif %}</td>
+    <td>
+      {% if u.id != g.user.id %}
+      <div class="row-actions">
+        <form method="post" action="{{ url_for('admin.toggle_role', user_id=u.id) }}" data-confirm-icon="🔑" data-confirm-title="{{ 'Tornar ' ~ u.name ~ ' aluno?' if u.role == 'admin' else 'Tornar ' ~ u.name ~ ' administrador?' }}" data-confirm="{{ 'A pessoa perde o acesso às áreas de administração.' if u.role == 'admin' else 'A pessoa poderá criar e excluir eventos, ver participantes e gerenciar contas.' }}" data-confirm-button="Confirmar">{{ csrf_field() }}<button class="btn small secondary">{{ 'Tornar aluno' if u.role == 'admin' else 'Tornar administrador' }}<span class="sr-only"> {{ u.name }}</span></button></form>
+        <form method="post" action="{{ url_for('admin.remove_user', user_id=u.id) }}" data-confirm-icon="🗑️" data-confirm-title="Excluir a conta de {{ u.name }}?" data-confirm="As inscrições e a posição na lista de espera dessa pessoa serão removidas. Essa ação não pode ser desfeita." data-confirm-button="Excluir conta">{{ csrf_field() }}<button class="btn small ghost-danger">Excluir<span class="sr-only"> {{ u.name }}</span></button></form>
+      </div>
+      {% else %}<span class="muted">Use Minha conta</span>{% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody></table></div></section>
+{{ pagination(pager, 'admin.users', filters) }}
+{% else %}<div class="empty">Nenhum usuário encontrado com esses filtros.</div>{% endif %}
+{% endblock %}

@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1130 800" width="1130" height="800" font-family="Segoe UI, Arial, sans-serif">
+<rect width="1130" height="800" fill="#f4f5fb"/>
+<text x="40" y="34" font-size="22" font-weight="700" fill="#1b2140">EventManager · Diagrama do banco de dados (SQLite)</text>
+<polyline points="330,124 415,142" fill="none" stroke="#5d6583" stroke-width="2"/>
+<rect x="333" y="97" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="346" y="113" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">1</text>
+<rect x="386" y="115" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="399" y="131" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">N</text>
+<polyline points="790,94 715,170" fill="none" stroke="#5d6583" stroke-width="2"/>
+<rect x="761" y="67" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="774" y="83" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">1</text>
+<rect x="718" y="143" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="731" y="159" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">N</text>
+<polyline points="185,257 185,482 415,482" fill="none" stroke="#5d6583" stroke-width="2"/>
+<rect x="172" y="264" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="185" y="280" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">1</text>
+<rect x="386" y="455" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="399" y="471" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">N</text>
+<polyline points="940,367 940,510 715,510" fill="none" stroke="#5d6583" stroke-width="2"/>
+<rect x="927" y="374" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="940" y="390" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">1</text>
+<rect x="718" y="483" width="26" height="22" rx="6" fill="#ffffff" stroke="#5d6583"/><text x="731" y="499" font-size="14" font-weight="700" text-anchor="middle" fill="#1b2140">N</text>
+<rect x="40" y="70" width="290" height="187" rx="12" fill="#ffffff" stroke="#4f46e5" stroke-width="2.5"/>
+<path d="M40,82 a12,12 0 0 1 12,-12 h266 a12,12 0 0 1 12,12 v28 h-290 z" fill="#4f46e5"/>
+<text x="56" y="96" font-size="18" font-weight="700" fill="#ffffff">users</text>
+<text x="54" y="129" font-size="12" font-weight="700" fill="#4f46e5">PK</text>
+<text x="88" y="129" font-size="14" font-weight="600" fill="#1b2140">id</text>
+<text x="316" y="129" font-size="13" text-anchor="end" fill="#5d6583">INTEGER</text>
+<rect x="42" y="138" width="286" height="28" fill="#f4f5fb"/>
+<text x="88" y="157" font-size="14" font-weight="600" fill="#1b2140">name</text>
+<text x="316" y="157" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="54" y="185" font-size="12" font-weight="700" fill="#8a5a00">UQ</text>
+<text x="88" y="185" font-size="14" font-weight="600" fill="#1b2140">email</text>
+<text x="316" y="185" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<rect x="42" y="194" width="286" height="28" fill="#f4f5fb"/>
+<text x="88" y="213" font-size="14" font-weight="600" fill="#1b2140">password_hash</text>
+<text x="316" y="213" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="88" y="241" font-size="14" font-weight="600" fill="#1b2140">role</text>
+<text x="316" y="241" font-size="13" text-anchor="end" fill="#5d6583">admin | student</text>
+<rect x="790" y="40" width="300" height="327" rx="12" fill="#ffffff" stroke="#0e6e4e" stroke-width="2.5"/>
+<path d="M790,52 a12,12 0 0 1 12,-12 h276 a12,12 0 0 1 12,12 v28 h-300 z" fill="#0e6e4e"/>
+<text x="806" y="66" font-size="18" font-weight="700" fill="#ffffff">events</text>
+<text x="804" y="99" font-size="12" font-weight="700" fill="#4f46e5">PK</text>
+<text x="838" y="99" font-size="14" font-weight="600" fill="#1b2140">id</text>
+<text x="1076" y="99" font-size="13" text-anchor="end" fill="#5d6583">INTEGER</text>
+<rect x="792" y="108" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="127" font-size="14" font-weight="600" fill="#1b2140">title</text>
+<text x="1076" y="127" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="838" y="155" font-size="14" font-weight="600" fill="#1b2140">description</text>
+<text x="1076" y="155" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<rect x="792" y="164" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="183" font-size="14" font-weight="600" fill="#1b2140">event_date</text>
+<text x="1076" y="183" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="838" y="211" font-size="14" font-weight="600" fill="#1b2140">event_time</text>
+<text x="1076" y="211" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<rect x="792" y="220" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="239" font-size="14" font-weight="600" fill="#1b2140">location</text>
+<text x="1076" y="239" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="838" y="267" font-size="14" font-weight="600" fill="#1b2140">capacity</text>
+<text x="1076" y="267" font-size="13" text-anchor="end" fill="#5d6583">INTEGER &gt; 0</text>
+<rect x="792" y="276" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="295" font-size="14" font-weight="600" fill="#1b2140">category</text>
+<text x="1076" y="295" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="838" y="323" font-size="14" font-weight="600" fill="#1b2140">cover_url</text>
+<text x="1076" y="323" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<rect x="792" y="332" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="351" font-size="14" font-weight="600" fill="#1b2140">created_at</text>
+<text x="1076" y="351" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<rect x="415" y="60" width="300" height="215" rx="12" fill="#ffffff" stroke="#b3303d" stroke-width="2.5"/>
+<path d="M415,72 a12,12 0 0 1 12,-12 h276 a12,12 0 0 1 12,12 v28 h-300 z" fill="#b3303d"/>
+<text x="431" y="86" font-size="18" font-weight="700" fill="#ffffff">registrations</text>
+<text x="429" y="119" font-size="12" font-weight="700" fill="#4f46e5">PK</text>
+<text x="463" y="119" font-size="14" font-weight="600" fill="#1b2140">id</text>
+<text x="701" y="119" font-size="13" text-anchor="end" fill="#5d6583">INTEGER</text>
+<rect x="417" y="128" width="296" height="28" fill="#f4f5fb"/>
+<text x="429" y="147" font-size="12" font-weight="700" fill="#b3303d">FK</text>
+<text x="463" y="147" font-size="14" font-weight="600" fill="#1b2140">user_id</text>
+<text x="701" y="147" font-size="13" text-anchor="end" fill="#5d6583">→ users.id</text>
+<text x="429" y="175" font-size="12" font-weight="700" fill="#b3303d">FK</text>
+<text x="463" y="175" font-size="14" font-weight="600" fill="#1b2140">event_id</text>
+<text x="701" y="175" font-size="13" text-anchor="end" fill="#5d6583">→ events.id</text>
+<rect x="417" y="184" width="296" height="28" fill="#f4f5fb"/>
+<text x="463" y="203" font-size="14" font-weight="600" fill="#1b2140">registered_at</text>
+<text x="701" y="203" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="463" y="231" font-size="14" font-weight="600" fill="#1b2140">attended</text>
+<text x="701" y="231" font-size="13" text-anchor="end" fill="#5d6583">0 | 1</text>
+<rect x="417" y="240" width="296" height="28" fill="#f4f5fb"/>
+<text x="429" y="259" font-size="12" font-weight="700" fill="#8a5a00">UQ</text>
+<text x="463" y="259" font-size="14" font-weight="600" fill="#1b2140">(user_id, event_id)</text>
+<text x="701" y="259" font-size="13" text-anchor="end" fill="#5d6583">sem duplicar</text>
+<rect x="415" y="400" width="300" height="187" rx="12" fill="#ffffff" stroke="#8a5a00" stroke-width="2.5"/>
+<path d="M415,412 a12,12 0 0 1 12,-12 h276 a12,12 0 0 1 12,12 v28 h-300 z" fill="#8a5a00"/>
+<text x="431" y="426" font-size="18" font-weight="700" fill="#ffffff">waitlist</text>
+<text x="429" y="459" font-size="12" font-weight="700" fill="#4f46e5">PK</text>
+<text x="463" y="459" font-size="14" font-weight="600" fill="#1b2140">id</text>
+<text x="701" y="459" font-size="13" text-anchor="end" fill="#5d6583">INTEGER</text>
+<rect x="417" y="468" width="296" height="28" fill="#f4f5fb"/>
+<text x="429" y="487" font-size="12" font-weight="700" fill="#b3303d">FK</text>
+<text x="463" y="487" font-size="14" font-weight="600" fill="#1b2140">user_id</text>
+<text x="701" y="487" font-size="13" text-anchor="end" fill="#5d6583">→ users.id</text>
+<text x="429" y="515" font-size="12" font-weight="700" fill="#b3303d">FK</text>
+<text x="463" y="515" font-size="14" font-weight="600" fill="#1b2140">event_id</text>
+<text x="701" y="515" font-size="13" text-anchor="end" fill="#5d6583">→ events.id</text>
+<rect x="417" y="524" width="296" height="28" fill="#f4f5fb"/>
+<text x="463" y="543" font-size="14" font-weight="600" fill="#1b2140">created_at</text>
+<text x="701" y="543" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="429" y="571" font-size="12" font-weight="700" fill="#8a5a00">UQ</text>
+<text x="463" y="571" font-size="14" font-weight="600" fill="#1b2140">(user_id, event_id)</text>
+<text x="701" y="571" font-size="13" text-anchor="end" fill="#5d6583">sem duplicar</text>
+<rect x="790" y="545" width="300" height="131" rx="12" fill="#ffffff" stroke="#5d6583" stroke-width="2.5"/>
+<path d="M790,557 a12,12 0 0 1 12,-12 h276 a12,12 0 0 1 12,12 v28 h-300 z" fill="#5d6583"/>
+<text x="806" y="571" font-size="18" font-weight="700" fill="#ffffff">rate_limits</text>
+<text x="804" y="604" font-size="12" font-weight="700" fill="#4f46e5">PK</text>
+<text x="838" y="604" font-size="14" font-weight="600" fill="#1b2140">id</text>
+<text x="1076" y="604" font-size="13" text-anchor="end" fill="#5d6583">INTEGER</text>
+<rect x="792" y="613" width="296" height="28" fill="#f4f5fb"/>
+<text x="838" y="632" font-size="14" font-weight="600" fill="#1b2140">key</text>
+<text x="1076" y="632" font-size="13" text-anchor="end" fill="#5d6583">login:… ou reset:…</text>
+<text x="838" y="660" font-size="14" font-weight="600" fill="#1b2140">created_at</text>
+<text x="1076" y="660" font-size="13" text-anchor="end" fill="#5d6583">TEXT</text>
+<text x="40" y="640" font-size="13.5" fill="#1b2140">1 → N  Um usuário tem várias inscrições; um evento tem várias inscrições (o mesmo vale para a lista de espera).</text>
+<text x="40" y="664" font-size="13.5" fill="#1b2140">ON DELETE CASCADE: ao excluir um usuário ou um evento, as inscrições e a fila ligadas a ele somem junto.</text>
+<text x="40" y="688" font-size="13.5" fill="#1b2140">UNIQUE(user_id, event_id): o banco impede inscrição duplicada, mesmo se o código falhar.</text>
+<text x="40" y="712" font-size="13.5" fill="#1b2140">rate_limits é uma tabela técnica (sem relações): registra tentativas de login e pedidos de recuperação de senha.</text>
+<text x="40" y="736" font-size="13.5" fill="#1b2140">PK = chave primária · FK = chave estrangeira · UQ = valor único</text>
+</svg>
